@@ -4,6 +4,37 @@ from backend.models import Banks, db
 bank_bp = Blueprint("bank", __name__)
 
 
+@bank_bp.route("/create", methods=["POST"])
+def create_bank():
+    """
+    Endpoint to create a new bank.
+    """
+    data = request.json
+    if not data or "name" not in data:
+        return jsonify({"error": "Bank name is required"}), 400
+
+    bank_name = data["name"]
+    existing_bank = Banks.query.filter_by(name=bank_name, status=True).first()
+    if existing_bank:
+        return jsonify({"error": "Bank already exists"}), 400
+
+    new_bank = Banks(name=bank_name, status=True)
+    db.session.add(new_bank)
+    db.session.commit()
+
+    return (
+        jsonify(
+            {
+                "id": new_bank.id,
+                "name": new_bank.name,
+                "created_at": new_bank.created_at,
+                "status": new_bank.status,
+            }
+        ),
+        201,
+    )
+
+
 @bank_bp.route("/all", methods=["GET"])
 def get_banks():
     """

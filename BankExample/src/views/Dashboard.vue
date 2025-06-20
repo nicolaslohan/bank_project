@@ -1,7 +1,6 @@
 <template>
   <v-container>
     <h1>Bem-vindo(a)!</h1>
-    <v-btn color="error" @click="logout">Sair</v-btn>
   </v-container>
   <v-container>
     <v-row>
@@ -24,7 +23,7 @@
             <p>Você pode gerenciar seus dados e realizar outras ações aqui.</p>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="router.push('/usuarios')">Gerenciar Usuários</v-btn>
+            <v-btn color="primary" @click="router.push('/manageUsers')">Gerenciar Usuários</v-btn>
             <v-btn color="primary" @click="router.push('/manageBanks')">Gerenciar Bancos</v-btn>
             <v-btn color="primary" @click="router.push('/perfis')">Gerenciar Perfis</v-btn>
           </v-card-actions>

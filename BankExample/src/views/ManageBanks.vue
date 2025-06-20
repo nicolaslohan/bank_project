@@ -1,9 +1,24 @@
 <template>
-    <v-btn color="secondary" @click="$router.back()" class="mb-4">
-        Voltar
-    </v-btn>
     <v-container>
+        <v-btn color="secondary" @click="$router.back()" class="mb-4">
+            Voltar
+        </v-btn>
         <h1>Gerenciar Bancos</h1>
+        <v-btn color="primary" @click="showForm = !showForm">
+            {{ showForm ? 'Cancelar' : 'Adicionar Banco' }}
+        </v-btn>
+        <v-form v-if="showForm" @submit.prevent="handleSubmit" class="my-4">
+            <v-text-field
+            v-model="form.name"
+            label="Nome do Banco"
+            required
+            ></v-text-field>
+            <v-btn type="submit" color="success" :loading="loading">
+            Salvar
+            </v-btn>
+        </v-form>
+        <v-alert v-if="error" type="error" class="my-2">{{ error }}</v-alert>
+        <v-alert v-if="success" type="success" class="my-2">{{ success }}</v-alert>
         <v-table>
             <thead>
                 <tr>
@@ -37,6 +52,7 @@ const form = ref({
     name: '',
 });
 
+const showForm = ref(false);
 const loading = ref(false);
 const error = ref(null);
 const success = ref(null);
@@ -68,7 +84,7 @@ async function handleSubmit() {
     success.value = null;
 
     try {
-        const response = await fetch('http://localhost:5000/banks/all', {
+        const response = await fetch('http://localhost:5000/banks/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
